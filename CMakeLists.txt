@@ -4,13 +4,12 @@ project(TurboHiker)
 set(CMAKE_CXX_STANDARD 11)
 
 add_executable(TurboHiker main.cpp
-        "Observer Pattern/Observer.cpp" "Observer Pattern/Observer.h"
-        "Observer Pattern/Observable.cpp" "Observer Pattern/Observable.h"
-        GameController/Controller.cpp GameController/Controller.h
-        GameModel/Model.cpp GameModel/Model.h
-        GameView/View.cpp GameView/View.h
+        Controller/Controller.cpp Controller/Controller.h
         Random.cpp Random.h
-        GameModel/Scoring.cpp GameModel/Scoring.h
-        GameModel/Game.cpp GameModel/Game.h
-        GameModel/World.cpp GameModel/World.h
-        GameModel/Lane.cpp GameModel/Lane.h)
+        Model/Scoring.cpp Model/Scoring.h
+        Model/GameModel.cpp Model/GameModel.h
+        Model/WorldModel.cpp Model/WorldModel.h
+        Model/LaneModel.cpp Model/LaneModel.h
+        View/LaneView.cpp View/LaneView.h
+        View/WorldView.cpp View/WorldView.h
+        View/GameView.cpp View/GameView.h Model/Event.cpp Model/Event.h Model/ClickEvent.cpp Model/ClickEvent.h)

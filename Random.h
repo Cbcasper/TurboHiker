@@ -15,14 +15,12 @@ namespace turboHiker
     class Random
     {
     private:
-        default_random_engine generator;
-        uniform_int_distribution<int> intDistribution;
-        uniform_real_distribution<double> doubleDistribution;
+        default_random_engine engine;
 
         Random();
 
     public:
-        static shared_ptr<Random> getInstance();
+        static Random getInstance();
         int randomInt(int a, int b);
         double randomDouble(double a, double b);
     };
