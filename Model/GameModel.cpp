@@ -4,6 +4,8 @@
 
 #include "GameModel.h"
 
+using namespace std;
+
 namespace turboHiker
 {
 

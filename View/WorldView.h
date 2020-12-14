@@ -9,25 +9,31 @@
 #include <memory>
 #include <iostream>
 #include "LaneView.h"
-#include "../Model/Event.h"
-
-using namespace std;
+#include "HikerView.h"
+#include "../Event/Event.h"
+#include "../Event/ViewEvent/ViewEvent.h"
 
 namespace turboHiker
 {
-    class Controller;
+    class World;
 
     class WorldView
     {
     private:
-        shared_ptr<Controller> controller;
-        vector<shared_ptr<LaneView>> lanes;
+        std::shared_ptr<World> world;
+        std::vector<std::shared_ptr<LaneView>> lanes;
+        std::vector<std::shared_ptr<HikerView>> hikers;
 
     public:
-        WorldView(const shared_ptr<Controller>& controller);
-        void raiseEvent(const shared_ptr<Event>& event);
+        WorldView();
+        void setWorld(const std::shared_ptr<World>& controller);
+        void raiseEvent(const std::shared_ptr<ViewEvent>& viewEvent);
 
-        const shared_ptr<LaneView>& getLane(int index);
+        const std::shared_ptr<LaneView>& getLane(int index);
+        const std::shared_ptr<HikerView>& getHiker(int index);
+
+        void start();
+        void wait();
     };
 }
 

@@ -8,14 +8,12 @@
 #include <memory>
 #include <random>
 
-using namespace std;
-
 namespace turboHiker
 {
     class Random
     {
     private:
-        default_random_engine engine;
+        std::default_random_engine engine;
 
         Random();
 

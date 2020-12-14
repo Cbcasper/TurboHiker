@@ -6,8 +6,9 @@
 #define TURBOHIKER_LANEVIEW_H
 
 #include <iostream>
-
-using namespace std;
+#include <future>
+#include <thread>
+#include <sstream>
 
 namespace turboHiker
 {
@@ -17,11 +18,17 @@ namespace turboHiker
     {
     private:
         int index;
-        shared_ptr<WorldView> world;
+        std::shared_ptr<WorldView> world;
+        std::packaged_task<void()> laneTask;
+        std::future<void> laneFuture;
+
+        void startLiving() const;
 
     public:
-        LaneView(const shared_ptr<WorldView>& world, int index);
+        LaneView(const std::shared_ptr<WorldView>& world, int index);
         void raiseEvent();
+        void start();
+        void wait();
     };
 }
 

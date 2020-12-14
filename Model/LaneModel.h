@@ -7,8 +7,6 @@
 
 #include <iostream>
 
-using namespace std;
-
 namespace turboHiker
 {
     class WorldModel;
@@ -17,10 +15,10 @@ namespace turboHiker
     {
     private:
         int index;
-        shared_ptr<WorldModel> world;
+        std::shared_ptr<WorldModel> worldModel;
 
     public:
-        LaneModel(const shared_ptr<WorldModel>& world, int index);
+        LaneModel(const std::shared_ptr<WorldModel>& worldModel, int index);
     };
 }
 

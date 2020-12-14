@@ -4,10 +4,12 @@
 
 #include "LaneModel.h"
 
+using namespace std;
+
 namespace turboHiker
 {
-    LaneModel::LaneModel(const shared_ptr<WorldModel>& world, int index): world(world), index(index)
+    LaneModel::LaneModel(const shared_ptr<WorldModel>& worldModel, int index): worldModel(worldModel), index(index)
     {
-        cout << "Lane model " << index << " is getting constructed!" << endl;
+        cout << "LaneModel " << index << " is getting constructed!" << endl;
     }
 }

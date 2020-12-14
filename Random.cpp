@@ -4,6 +4,8 @@
 
 #include "Random.h"
 
+using namespace std;
+
 namespace turboHiker
 {
     Random::Random()

@@ -9,14 +9,12 @@
 #include <vector>
 #include "LaneModel.h"
 
-using namespace std;
-
 namespace turboHiker
 {
     class GameModel
     {
     private:
-        vector<shared_ptr<LaneModel>> lanes;
+        std::vector<std::shared_ptr<LaneModel>> lanes;
     };
 }
 

@@ -8,21 +8,30 @@
 #include <vector>
 #include <memory>
 #include "LaneModel.h"
-
-using namespace std;
+#include "HikerModel.h"
+#include "../Event/ModelEvent/ModelEvent.h"
 
 namespace turboHiker
 {
-    class Controller;
+    class World;
 
     class WorldModel
     {
     private:
-        shared_ptr<Controller> controller;
-        vector<shared_ptr<LaneModel>> lanes;
+        std::shared_ptr<World> world;
+        std::vector<std::shared_ptr<LaneModel>> lanes;
+        std::vector<std::shared_ptr<HikerModel>> hikers;
+    public:
+        bool inWait;
 
     public:
-        WorldModel(const shared_ptr<Controller>& controller);
+        WorldModel(const std::shared_ptr<World>& world);
+
+        void start();
+        void wait();
+
+        void raiseEvent(const std::shared_ptr<ModelEvent>& event);
+        bool isInWait() const;
     };
 }
 

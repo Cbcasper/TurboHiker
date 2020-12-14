@@ -7,18 +7,22 @@
 
 #include <string>
 
-using namespace std;
-
 namespace turboHiker
 {
     class Event
     {
+    public:
+        enum EventType {ClickEvent, HikerEvent};
+
     protected:
-        string message;
+        std::string message;
 
     public:
-        Event(const string& message);
-        virtual string what();
+        EventType eventType;
+
+        Event(const std::string& message, EventType eventType);
+
+        virtual std::string what() = 0;
     };
 }
 
