@@ -10,55 +10,52 @@ using namespace std;
 
 namespace turboHiker
 {
-
-    HikerModel::HikerModel(const std::shared_ptr<WorldModel>& worldModel, int index): worldModel(worldModel), index(index)
+    HikerModel::HikerModel(const weak_ptr<WorldModel>& worldModel, int hikerIndex): worldModel(worldModel), hikerIndex(hikerIndex), x(hikerIndex * 400 + 200), y(1300)
     {
-        cout << "HikerModel " << index << " is being constructed." << endl;
-        hikerTask = packaged_task<void()>(bind(&HikerModel::live, this));
-        hikerFuture = hikerTask.get_future();
-        thread(move(hikerTask)).detach();
+        cout << "HikerModel " << hikerIndex << " is being constructed." << endl;
     }
 
-    void HikerModel::live()
+    void HikerModel::receiveEvent(const shared_ptr<Event>& event)
+    {
+        stringstream message;
+        message << "HikerModel " << hikerIndex << " received an event: " << event->what() << endl;
+        cout << message.str();
+        switch (event->eventType)
+        {
+            case Event::HikerControllerEvent:
+                y -= 1;
+                worldModel.lock()->raiseEvent(
+                        make_shared<HikerModelEvent>(shared_from_this(), HikerEvent::StateUpdated,
+                                                            "The state of hikerModel " + to_string(hikerIndex) + " was updated."));
+            default:
+                break;
+        }
+    }
+
+    void HikerModel::setCurrentLane(const weak_ptr<LaneModel>& givenCurrentLane)
+    {
+        currentLane = givenCurrentLane;
+    }
+
+    std::string HikerModel::toString() const
     {
         stringstream output;
-        output << "HikerModel " << index << " started living." << endl;
-        cout << output.str();
-
-//        int i = 0;
-//        while (worldModel->inWait)
-//        {
-//            if (i % 1000 == 0)
-//                cout << boolalpha << i << " " << worldModel->inWait  << endl;
-//            i++;
-//        }
-
-        int timeToLive = 5000;
-        int hasLivedFor = 0;
-        int interval = (index + 1) * 500;
-
-        stringstream intervalMessage;
-        intervalMessage << string(index * 5, '\t') << "HikerModel " << index << " has an interval of " << interval << endl;
-        cout << intervalMessage.str();
-
-        this_thread::sleep_for(chrono::milliseconds(1000));
-        while (hasLivedFor < timeToLive)
-        {
-            this_thread::sleep_for(chrono::milliseconds(interval));
-            stringstream message;
-            message << string(index * 5, '\t') << "HikerModel " << index << " at " << hasLivedFor;
-            worldModel->raiseEvent(make_shared<ModelHikerEvent>(message.str(), index));
-            hasLivedFor += interval;
-        }
-        this_thread::sleep_for(chrono::milliseconds(1000));
-
-        stringstream stoppedMessage;
-        stoppedMessage << "HikerModel " << index << " has stopped living." << endl;
-        cout << stoppedMessage.str();
+        output << "Hiker " << hikerIndex << " is at " << x << ", " << y;
+        return output.str();
     }
 
-    void HikerModel::wait()
+    double HikerModel::getX() const
     {
-        hikerFuture.wait();
+        return x;
+    }
+
+    double HikerModel::getY() const
+    {
+        return y;
+    }
+
+    int HikerModel::getIndex() const
+    {
+        return hikerIndex;
     }
 }

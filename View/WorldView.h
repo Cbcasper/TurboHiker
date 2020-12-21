@@ -19,21 +19,24 @@ namespace turboHiker
 
     class WorldView
     {
-    private:
-        std::shared_ptr<World> world;
+    protected:
         std::vector<std::shared_ptr<LaneView>> lanes;
         std::vector<std::shared_ptr<HikerView>> hikers;
 
+        std::weak_ptr<World> world;
+
     public:
         WorldView();
-        void setWorld(const std::shared_ptr<World>& controller);
+        void setWorld(const std::weak_ptr<World>& givenWorld);
         void raiseEvent(const std::shared_ptr<ViewEvent>& viewEvent);
 
         const std::shared_ptr<LaneView>& getLane(int index);
         const std::shared_ptr<HikerView>& getHiker(int index);
 
-        void start();
-        void wait();
+        virtual std::shared_ptr<HikerView> constructHiker(int hikerIndex, const std::weak_ptr<WorldView>& worldView) = 0;
+        virtual void constructLane(int laneIndex, const std::weak_ptr<WorldView>& worldView, const std::list<std::shared_ptr<HikerView>>& hikers) = 0;
+
+        virtual void render() = 0;
     };
 }
 

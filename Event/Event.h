@@ -11,13 +11,12 @@ namespace turboHiker
 {
     class Event
     {
-    public:
-        enum EventType {ClickEvent, HikerEvent};
-
     protected:
         std::string message;
 
     public:
+        enum EventType {GameEvent, HikerModelEvent, HikerViewEvent, HikerControllerEvent};
+
         EventType eventType;
 
         Event(const std::string& message, EventType eventType);

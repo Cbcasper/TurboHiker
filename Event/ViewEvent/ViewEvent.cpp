@@ -6,8 +6,7 @@
 
 namespace turboHiker
 {
-
-    ViewEvent::ViewEvent(const std::string& message, Event::EventType eventType): Event(message, eventType)
+    ViewEvent::ViewEvent(EventType eventType, const std::string& message) : Event(message, eventType)
     {
 
     }

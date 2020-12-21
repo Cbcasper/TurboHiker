@@ -9,36 +9,46 @@ using namespace std;
 
 namespace turboHiker
 {
-    WorldModel::WorldModel(const shared_ptr<World>& world): world(world), inWait(true)
+    WorldModel::WorldModel(const weak_ptr<World>& world): world(world)
     {
         cout << "This worldModel is getting constructed." << endl;
-        shared_ptr<WorldModel> model = make_shared<WorldModel>(*this);
-        for (int i = 0; i < 4; ++i)
-        {
-            lanes.emplace_back(make_shared<LaneModel>(model, i));
-            hikers.emplace_back(make_shared<HikerModel>(model, i));
-        }
-    }
-
-    void WorldModel::start()
-    {
-        this_thread::sleep_for(chrono::milliseconds(3000));
-        inWait = false;
-    }
-
-    void WorldModel::wait()
-    {
-        for (const shared_ptr<HikerModel>& hiker: hikers)
-            hiker->wait();
     }
 
     void WorldModel::raiseEvent(const shared_ptr<ModelEvent>& event)
     {
-        world->raiseModelEvent(event);
+        world.lock()->raiseModelEvent(event);
     }
 
-    bool WorldModel::isInWait() const
+    const std::shared_ptr<HikerModel>& WorldModel::getHiker(int hikerIndex)
     {
-        return inWait;
+        return hikers[hikerIndex];
+    }
+
+    std::shared_ptr<HikerModel> WorldModel::constructHiker(int hikerIndex, const weak_ptr<WorldModel>& worldModel)
+    {
+        shared_ptr<HikerModel> hiker = make_shared<HikerModel>(worldModel, hikerIndex);
+        hikers.emplace_back(hiker);
+        return hiker;
+    }
+
+    void WorldModel::constructLane(int laneIndex, const weak_ptr<WorldModel>& worldModel, const list<shared_ptr<HikerModel>>& hikerList)
+    {
+        shared_ptr<LaneModel> lane = make_shared<LaneModel>(worldModel, laneIndex, hikerList);
+        lanes.emplace_back(lane);
+        for (const shared_ptr<HikerModel>& hiker: hikerList)
+            hiker->setCurrentLane(lane);
+    }
+
+    std::string WorldModel::toString()
+    {
+        stringstream output;
+        output << "This is the world model:" << endl
+               << "Lanes: " << endl;
+        for (const shared_ptr<LaneModel>& lane: lanes)
+            output << "\t" << lane->toString() << endl;
+        output << "Hikers: " << endl;
+        for (const shared_ptr<HikerModel>& hiker: hikers)
+            output << "\t" << hiker->toString() << endl;
+        return output.str();
     }
 }

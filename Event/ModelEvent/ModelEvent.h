@@ -12,7 +12,7 @@ namespace turboHiker
     class ModelEvent: public Event
     {
     public:
-        ModelEvent(const std::string& message, EventType eventType);
+        ModelEvent(EventType eventType, const std::string& message = "ModelEvent");
     };
 }
 

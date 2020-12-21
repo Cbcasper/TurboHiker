@@ -7,9 +7,11 @@
 
 #include <vector>
 #include <memory>
+#include <string>
 #include "LaneModel.h"
 #include "HikerModel.h"
 #include "../Event/ModelEvent/ModelEvent.h"
+#include "../Event/ViewEvent/ViewEvent.h"
 
 namespace turboHiker
 {
@@ -18,20 +20,21 @@ namespace turboHiker
     class WorldModel
     {
     private:
-        std::shared_ptr<World> world;
+        std::weak_ptr<World> world;
         std::vector<std::shared_ptr<LaneModel>> lanes;
         std::vector<std::shared_ptr<HikerModel>> hikers;
-    public:
-        bool inWait;
 
     public:
-        WorldModel(const std::shared_ptr<World>& world);
-
-        void start();
-        void wait();
+        WorldModel(const std::weak_ptr<World>& world);
 
         void raiseEvent(const std::shared_ptr<ModelEvent>& event);
-        bool isInWait() const;
+
+        std::shared_ptr<HikerModel> constructHiker(int hikerIndex, const std::weak_ptr<WorldModel>& worldModel);
+        void constructLane(int laneIndex, const std::weak_ptr<WorldModel>& worldModel, const std::list<std::shared_ptr<HikerModel>>& hikerList);
+
+        std::string toString();
+
+        const std::shared_ptr<HikerModel>& getHiker(int hikerIndex);
     };
 }
 

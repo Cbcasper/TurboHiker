@@ -7,6 +7,6 @@
 namespace turboHiker
 {
 
-    ModelEvent::ModelEvent(const std::string& message, Event::EventType eventType): Event(message, eventType)
+    ModelEvent::ModelEvent(EventType eventType, const std::string& message): Event(message, eventType)
     {}
 }

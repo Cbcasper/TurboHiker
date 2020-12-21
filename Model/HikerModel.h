@@ -9,26 +9,38 @@
 #include <future>
 #include <thread>
 #include <iostream>
-#include "../Event/ModelEvent/ModelHikerEvent.h"
+#include "../Event/ModelEvent/HikerModelEvent.h"
+#include "../Event/ViewEvent/ViewEvent.h"
 
 namespace turboHiker
 {
     class WorldModel;
+    class LaneModel;
 
-    class HikerModel
+    class HikerModel: public std::enable_shared_from_this<HikerModel>
     {
     private:
-        int index;
-        std::shared_ptr<WorldModel> worldModel;
-        std::packaged_task<void()> hikerTask;
-        std::future<void> hikerFuture;
+        int hikerIndex;
 
-        void live();
+        double x;
+        double y;
+
+        std::weak_ptr<WorldModel> worldModel;
+        std::weak_ptr<LaneModel> currentLane;
 
     public:
-        HikerModel(const std::shared_ptr<WorldModel>& worldModel, int index);
+        HikerModel(const std::weak_ptr<WorldModel>& worldModel, int hikerIndex);
 
-        void wait();
+        void setCurrentLane(const std::weak_ptr<LaneModel>& givenCurrentLane);
+
+        void receiveEvent(const std::shared_ptr<Event>& event);
+
+        std::string toString() const;
+
+        double getX() const;
+        double getY() const;
+
+        int getIndex() const;
     };
 }
 

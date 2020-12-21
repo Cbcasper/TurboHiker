@@ -12,7 +12,7 @@ namespace turboHiker
     class ViewEvent: public Event
     {
     public:
-        ViewEvent(const std::string& message, EventType eventType);
+        ViewEvent(EventType eventType, const std::string& message = "ViewEvent");
     };
 }
 

@@ -9,26 +9,34 @@
 #include <future>
 #include <thread>
 #include <sstream>
+#include <memory>
+#include <list>
 
 namespace turboHiker
 {
     class WorldView;
+    class HikerView;
 
     class LaneView
     {
-    private:
+    protected:
+        std::weak_ptr<WorldView> worldView;
+        std::list<std::shared_ptr<HikerView>> hikers;
+
         int index;
-        std::shared_ptr<WorldView> world;
-        std::packaged_task<void()> laneTask;
-        std::future<void> laneFuture;
-
-        void startLiving() const;
-
     public:
-        LaneView(const std::shared_ptr<WorldView>& world, int index);
+        LaneView(const std::weak_ptr<WorldView>& world, int laneIndex, const std::list<std::shared_ptr<turboHiker::HikerView>>& hikers);
+
         void raiseEvent();
-        void start();
-        void wait();
+
+        virtual ~LaneView();
+
+        template<class ...Hikers> void addHikers(const Hikers& ...newHikers)
+        {
+            std::list<std::shared_ptr<HikerView>> newHikerList = {newHikers...};
+            for (const std::shared_ptr<HikerView>& hiker: newHikerList)
+                hikers.emplace_back(hiker);
+        }
     };
 }
 

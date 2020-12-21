@@ -4,38 +4,23 @@
 
 #include "LaneView.h"
 #include "WorldView.h"
-#include "../Event/ViewEvent/ViewClickEvent.h"
 
 using namespace std;
 
 namespace turboHiker
 {
-    LaneView::LaneView(const shared_ptr<WorldView>& world, int index): world(world), index(index)
+    LaneView::LaneView(const std::weak_ptr<WorldView>& worldView, int laneIndex, const list<shared_ptr<turboHiker::HikerView>>& hikers): worldView(worldView), index(laneIndex), hikers(hikers)
     {
-        cout << "LaneView " << index << " is getting constructed!" << endl;
-        laneTask = packaged_task<void()>(bind(&LaneView::startLiving, this));
-        laneFuture = laneTask.get_future();
+        cout << "LaneView " << laneIndex << " is getting constructed!" << endl;
     }
 
     void LaneView::raiseEvent()
     {
-        world->raiseEvent(make_shared<ViewClickEvent>("I was raised by lane worldView " + to_string(index)));
+
     }
 
-    void LaneView::startLiving() const
+    LaneView::~LaneView()
     {
-        stringstream output;
-        output << "Lane " << index << " started living." << endl;
-        cout << output.str();
-    }
 
-    void LaneView::start()
-    {
-        thread(move(laneTask)).detach();
-    }
-
-    void LaneView::wait()
-    {
-        laneFuture.wait();
     }
 }
