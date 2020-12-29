@@ -3,14 +3,14 @@
 //
 
 #include "HikerView.h"
-#include "WorldView.h"
+#include "../WorldView.h"
 
 using namespace std;
 
 namespace turboHiker
 {
     HikerView::HikerView(const weak_ptr<WorldView>& worldView, int hikerIndex) :
-            worldView(worldView), hikerIndex(hikerIndex), x(float(hikerIndex) * 400 + 200), y(1300)
+            worldView(worldView), hikerIndex(hikerIndex)
     {
         cout << "HikerView " << hikerIndex << " is getting constructed!" << endl;
     }

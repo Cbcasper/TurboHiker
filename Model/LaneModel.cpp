@@ -22,4 +22,14 @@ namespace turboHiker
             output << "\t" << hiker->toString() << endl;
         return output.str();
     }
+
+    int LaneModel::getLaneIndex()
+    {
+        return index;
+    }
+
+    void LaneModel::removeHiker(const shared_ptr<HikerModel>& hiker)
+    {
+        hikers.remove(hiker);
+    }
 }

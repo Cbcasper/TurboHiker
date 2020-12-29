@@ -3,24 +3,21 @@
 //
 
 #include "WorldView.h"
-#include "../Controller/World.h"
 
 using namespace std;
 
 namespace turboHiker
 {
-    WorldView::WorldView()
-    {
-        cout << "This worldView is getting constructed." << endl;
-    }
+    WorldView::WorldView(int screenX, int screenY): screenX(screenX), screenY(screenY)
+    {}
 
-    void WorldView::raiseEvent(const shared_ptr<ViewEvent>& viewEvent)
-    {
-        stringstream message;
-        message << "WorldView says 'An viewEvent was raised: " << viewEvent->what() << "'" << endl;
+//    void WorldView::raiseEvent(const shared_ptr<ViewEvent>& viewEvent)
+//    {
+//        stringstream message;
+//        message << "WorldView says 'A viewEvent was raised: " << viewEvent->what() << "'" << endl;
 //        cout << message.str();
-        world.lock()->raiseViewEvent(viewEvent);
-    }
+//        world.lock()->raiseViewEvent(viewEvent);
+//    }
 
     const shared_ptr<LaneView>& WorldView::getLane(int index)
     {
@@ -35,5 +32,15 @@ namespace turboHiker
     const std::shared_ptr<HikerView>& WorldView::getHiker(int index)
     {
         return hikers[index];
+    }
+
+    int WorldView::getScreenX()
+    {
+        return screenX;
+    }
+
+    int WorldView::getScreenY()
+    {
+        return screenY;
     }
 }

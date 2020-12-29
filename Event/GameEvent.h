@@ -12,13 +12,13 @@ namespace turboHiker
     class GameEvent: public Event
     {
     public:
-        enum GameEventType {Start, Stop, ForcedStop};
+        enum GameEventType {StartCountDown, CountDown, Start, Stop, ForcedStop};
 
         GameEventType gameEventType;
 
         explicit GameEvent(GameEventType gameEventType, const std::string& message = "GameEvent");
 
-        std::string what();
+        std::string what() override;
     };
 }
 

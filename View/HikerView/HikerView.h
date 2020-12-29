@@ -10,10 +10,10 @@
 #include <sstream>
 #include <future>
 #include <thread>
-#include "../Event/ModelEvent/ModelEvent.h"
-#include "../Event/ViewEvent/ViewEvent.h"
-#include "../Event/ViewEvent/HikerViewEvent.h"
-#include "LaneView.h"
+#include "../../Event/ModelEvent/ModelEvent.h"
+#include "../../Event/ViewEvent/ViewEvent.h"
+#include "../../Event/ViewEvent/HikerViewEvent.h"
+#include "../LaneView.h"
 
 namespace turboHiker
 {
@@ -26,16 +26,13 @@ namespace turboHiker
         std::weak_ptr<WorldView> worldView;
         std::weak_ptr<LaneView> currentLane;
 
-        float x;
-        float y;
-
     public:
         HikerView(const std::weak_ptr<WorldView>& worldView, int hikerIndex);
         virtual ~HikerView() = default;
 
         void setCurrentLane(const std::weak_ptr<LaneView>& givenCurrentLane);
 
-        virtual void receiveEvent(const std::shared_ptr<ModelEvent>& event) = 0;
+        virtual void handleEvent(const std::shared_ptr<Event>& event) = 0;
         void raiseEvent();
 
         int getIndex() const;

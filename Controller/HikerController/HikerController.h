@@ -21,9 +21,12 @@ namespace turboHiker
     class HikerController
     {
     protected:
-        int index;
+        int hikerIndex;
+        int laneIndex;
+
         bool living;
         int interval;
+        bool started;
 
         std::weak_ptr<World> world;
 
@@ -36,10 +39,8 @@ namespace turboHiker
         HikerController(const std::weak_ptr<World>& world, int index);
         virtual ~HikerController();
 
-        virtual void raiseEvent(const std::shared_ptr<Event>& event) = 0;
-        void raiseGameEvent(const std::shared_ptr<GameEvent>& event);
-
-        void timedMessages();
+        virtual void handleEvent(const std::shared_ptr<Event>& event) = 0;
+//        void raiseGameEvent(const std::shared_ptr<GameEvent>& event);
     };
 }
 

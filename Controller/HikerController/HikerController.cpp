@@ -11,7 +11,7 @@ using namespace std;
 
 namespace turboHiker
 {
-    HikerController::HikerController(const weak_ptr<World>& world, int index): world(world), index(index), living(true), interval(10)
+    HikerController::HikerController(const weak_ptr<World>& world, int index): world(world), hikerIndex(index), living(true), started(false), interval(5), laneIndex(index)
     {
         hikerTask = packaged_task<void()>(bind(&HikerController::live, this));
         hikerFuture = hikerTask.get_future();
@@ -20,47 +20,62 @@ namespace turboHiker
     HikerController::~HikerController()
     {
         cout << "Waiting for hikerFuture..." << endl;
-        hikerFuture.wait();
+        if (started)
+            hikerFuture.wait();
         cout << "HikerFuture has finished." << endl;
     }
 
-    void HikerController::timedMessages()
+//    void HikerController::raiseGameEvent(const shared_ptr<GameEvent>& event)
+//    {
+//        switch (event->gameEventType)
+//        {
+//            case GameEvent::Start:
+//                thread(move(hikerTask)).detach();
+//                started = true;
+//                break;
+//            case GameEvent::ForcedStop:
+//            case GameEvent::Stop:
+//                {
+//                    message << "HikerController " << hikerIndex << " stops living." << endl;
+//                    cout << message.str();
+//                    living = false;
+//                }
+//                break;
+//            default:
+//                break;
+//        }
+//    }
+
+    void HikerController::handleEvent(const shared_ptr<Event>& event)
     {
-        int timeToLive = 5000;
-        int hasLivedFor = 0;
-        int interval = (index + 1) * 250;
-
-        stringstream intervalMessage;
-        intervalMessage << "HikerController " << index << " has an interval of " << interval << endl;
-        cout << intervalMessage.str();
-
-        while (hasLivedFor < timeToLive)
+        stringstream message;
+        switch (event->eventType)
         {
-            this_thread::sleep_for(chrono::milliseconds(interval));
-            hasLivedFor += interval;
-            stringstream message;
-            message << "HikerController " << index << " at " << hasLivedFor;
-            cout << message.str() << endl;
-            world.lock()->raiseControllerEvent(make_shared<HikerControllerEvent>(index, HikerEvent::UpdateState, message.str()));
-        }
-        this_thread::sleep_for(chrono::milliseconds(1000));
-    }
-
-    void HikerController::raiseGameEvent(const shared_ptr<GameEvent>& event)
-    {
-        switch (event->gameEventType)
-        {
-            case GameEvent::Start:
-                thread(move(hikerTask)).detach();
+            case Event::StartCountDown:
                 break;
-            case GameEvent::ForcedStop:
-            case GameEvent::Stop:
-                {
-                    stringstream message;
-                    message << "HikerController " << index << " stops living." << endl;
-                    cout << message.str();
-                    living = false;
-                }
+            case Event::CountDown:
+                break;
+            case Event::StartGame:
+                thread(move(hikerTask)).detach();
+                started = true;
+                break;
+            case Event::StopGame:
+            case Event::ForceStopGame:
+                message << "HikerController " << hikerIndex << " stops living." << endl;
+                cout << message.str();
+                living = false;
+                break;
+            case Event::MoveLeft:
+                break;
+            case Event::MoveRight:
+                break;
+            case Event::MoveForward:
+                break;
+            case Event::SpeedUp:
+                break;
+            case Event::SpeedDown:
+                break;
+            case Event::StateUpdated:
                 break;
         }
     }

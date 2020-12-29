@@ -19,7 +19,7 @@ namespace turboHiker
 
     public:
         HikerModelEvent(const std::shared_ptr<turboHiker::HikerModel>& hiker, HikerEventType hikerEventType,
-                        const std::string& message = "HikerModelEvent");
+                        Direction direction = NoDirection, const std::string& message = "HikerModelEvent");
         std::string what() override;
 
         float getHikerX();

@@ -9,19 +9,44 @@
 
 namespace turboHiker
 {
+    class HikerModel;
+
     class Event
     {
     protected:
         std::string message;
 
+        int hikerIndex;
+        std::shared_ptr<HikerModel> hiker;
+
     public:
-        enum EventType {GameEvent, HikerModelEvent, HikerViewEvent, HikerControllerEvent};
+        enum EventType
+        {
+            StartCountDown,
+            CountDown,
+            StartGame,
+            StopGame,
+            ForceStopGame,
+            MoveLeft,
+            MoveRight,
+            MoveForward,
+            SpeedUp,
+            SpeedDown,
+            StateUpdated
+        };
 
         EventType eventType;
 
-        Event(const std::string& message, EventType eventType);
+        explicit Event(EventType eventType, const std::string& message = "");
+        Event(EventType eventType, int hikerIndex, const std::string& message = "");
+        Event(EventType eventType, const std::shared_ptr<HikerModel>& hiker, const std::string& message = "");
 
-        virtual std::string what() = 0;
+        virtual std::string what();
+
+        int getHikerIndex() const;
+
+        double getHikerX() const;
+        double getHikerY() const;
     };
 }
 

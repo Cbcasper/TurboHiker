@@ -4,8 +4,8 @@
 
 #include "HikerControllerEvent.h"
 
-turboHiker::HikerControllerEvent::HikerControllerEvent(int hikerIndex, HikerEventType hikerEventType, const std::string& message) :
-        ControllerEvent(Event::HikerControllerEvent, message), HikerEvent(hikerIndex, hikerEventType)
+turboHiker::HikerControllerEvent::HikerControllerEvent(int hikerIndex, HikerEventType hikerEventType, Direction direction, int newLaneIndex, const std::string& message) :
+        ControllerEvent(Event::HikerControllerEvent, message), HikerEvent(hikerIndex, hikerEventType, direction), newLaneIndex(newLaneIndex)
 {}
 
 std::string turboHiker::HikerControllerEvent::what()
@@ -13,7 +13,8 @@ std::string turboHiker::HikerControllerEvent::what()
     return message;
 }
 
-int turboHiker::HikerControllerEvent::getIndex() const
+int turboHiker::HikerControllerEvent::getNewLaneIndex() const
 {
-    return hikerIndex;
+    return newLaneIndex;
 }
+

@@ -9,7 +9,7 @@
 #include <list>
 #include <memory>
 #include <sstream>
-#include "HikerModel.h"
+#include "HikerModel/HikerModel.h"
 
 namespace turboHiker
 {
@@ -28,6 +28,9 @@ namespace turboHiker
 
         std::string toString();
 
+        int getLaneIndex();
+
+        void removeHiker(const std::shared_ptr<HikerModel>& hiker);
         template<class ...Hikers> void addHikers(const Hikers& ...newHikers)
         {
             std::list<std::shared_ptr<HikerModel>> newHikerList = {newHikers...};

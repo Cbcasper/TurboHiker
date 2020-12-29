@@ -4,6 +4,14 @@
 
 #include "HikerEvent.h"
 
-turboHiker::HikerEvent::HikerEvent(int hikerIndex, turboHiker::HikerEvent::HikerEventType hikerEventType) :
-        hikerIndex(hikerIndex), hikerEventType(hikerEventType)
-{}
+int turboHiker::HikerEvent::getHikerIndex() const
+{
+    return hikerIndex;
+}
+
+namespace turboHiker
+{
+    HikerEvent::HikerEvent(int hikerIndex, HikerEventType hikerEventType, Direction direction):
+            hikerIndex(hikerIndex), hikerEventType(hikerEventType), direction(direction)
+    {}
+}

@@ -3,7 +3,7 @@
 //
 
 #include "HikerModelEvent.h"
-#include "../../Model/HikerModel.h"
+#include "../../Model/HikerModel/HikerModel.h"
 
 using namespace std;
 
@@ -11,8 +11,8 @@ namespace turboHiker
 {
 
     HikerModelEvent::HikerModelEvent(const std::shared_ptr<turboHiker::HikerModel>& hiker, HikerEventType hikerEventType,
-                                     const std::string& message):
-            ModelEvent(Event::HikerModelEvent, message), HikerEvent(hiker->getIndex(), hikerEventType), hiker(hiker)
+                                     Direction direction, const std::string& message):
+            ModelEvent(Event::HikerModelEvent, message), HikerEvent(hiker->getIndex(), hikerEventType, direction), hiker(hiker)
     {
 
     }

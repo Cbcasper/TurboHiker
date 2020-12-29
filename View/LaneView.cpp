@@ -21,6 +21,6 @@ namespace turboHiker
 
     LaneView::~LaneView()
     {
-
+        cout << "This laneView is getting destructed." << endl;
     }
 }

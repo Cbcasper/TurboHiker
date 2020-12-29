@@ -9,14 +9,14 @@ using namespace std;
 
 namespace turboHiker
 {
-    WorldModel::WorldModel(const weak_ptr<World>& world): world(world)
+    WorldModel::WorldModel(const weak_ptr<World>& world, double worldX, double worldY): world(world), worldX(worldX), worldY(worldY)
     {
         cout << "This worldModel is getting constructed." << endl;
     }
 
-    void WorldModel::raiseEvent(const shared_ptr<ModelEvent>& event)
+    void WorldModel::raiseEvent(const shared_ptr<Event>& event)
     {
-        world.lock()->raiseModelEvent(event);
+        world.lock()->handleEvent(event);
     }
 
     const std::shared_ptr<HikerModel>& WorldModel::getHiker(int hikerIndex)
@@ -24,9 +24,18 @@ namespace turboHiker
         return hikers[hikerIndex];
     }
 
-    std::shared_ptr<HikerModel> WorldModel::constructHiker(int hikerIndex, const weak_ptr<WorldModel>& worldModel)
+    std::shared_ptr<HikerModel> WorldModel::constructHiker(int hikerIndex, World::HikerType hikerType, const weak_ptr<WorldModel>& worldModel)
     {
-        shared_ptr<HikerModel> hiker = make_shared<HikerModel>(worldModel, hikerIndex);
+        shared_ptr<HikerModel> hiker;
+        switch (hikerType)
+        {
+            case World::PlayerHiker:
+                hiker = make_shared<PlayerHikerModel>(worldModel, hikerIndex);
+                break;
+            case World::RacingHiker:
+                hiker = make_shared<RacingHikerModel>(worldModel, hikerIndex);
+                break;
+        }
         hikers.emplace_back(hiker);
         return hiker;
     }
@@ -36,7 +45,7 @@ namespace turboHiker
         shared_ptr<LaneModel> lane = make_shared<LaneModel>(worldModel, laneIndex, hikerList);
         lanes.emplace_back(lane);
         for (const shared_ptr<HikerModel>& hiker: hikerList)
-            hiker->setCurrentLane(lane);
+            hiker->initializeCurrentLane(lane);
     }
 
     std::string WorldModel::toString()
@@ -50,5 +59,28 @@ namespace turboHiker
         for (const shared_ptr<HikerModel>& hiker: hikers)
             output << "\t" << hiker->toString() << endl;
         return output.str();
+    }
+
+    double WorldModel::getWorldX() const
+    {
+        return worldX;
+    }
+
+    double WorldModel::getWorldY() const
+    {
+        return worldY;
+    }
+
+    void WorldModel::changeLane(int hikerIndex, Event::EventType eventType)
+    {
+        shared_ptr<HikerModel> hiker = hikers[hikerIndex];
+        int laneIndex = hiker->getLaneIndex();
+        shared_ptr<LaneModel> oldLane = lanes[laneIndex];
+        int newLaneIndex = eventType == Event::MoveLeft ? --laneIndex : ++laneIndex;
+        shared_ptr<LaneModel> newLane = lanes[newLaneIndex];
+
+        oldLane->removeHiker(hiker);
+        newLane->addHikers(hiker);
+        hiker->setCurrentLane(newLane);
     }
 }

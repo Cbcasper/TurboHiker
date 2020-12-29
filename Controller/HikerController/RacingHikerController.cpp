@@ -14,30 +14,47 @@ namespace turboHiker
 
     void RacingHikerController::live()
     {
+        stringstream message;
         while (living)
         {
-            stringstream message;
-            message << "HikerController " << index;
-            world.lock()->raiseControllerEvent(make_shared<HikerControllerEvent>(index, HikerEvent::UpdateState, message.str()));
+            message << "HikerController " << hikerIndex;
+            if (!world.expired())
+                world.lock()->handleEvent(make_shared<Event>(Event::MoveForward, hikerIndex));
             this_thread::sleep_for(chrono::milliseconds(interval));
         }
     }
 
-    void RacingHikerController::raiseEvent(const shared_ptr<Event>& event)
+    void RacingHikerController::handleEvent(const shared_ptr<Event>& event)
     {
         switch (event->eventType)
         {
-            case Event::HikerModelEvent:
+            case Event::StartCountDown:
                 break;
-            case Event::HikerViewEvent:
+            case Event::CountDown:
                 break;
-            default:
+            case Event::StartGame:
+                break;
+            case Event::StopGame:
+                break;
+            case Event::ForceStopGame:
+                break;
+            case Event::MoveLeft:
+                break;
+            case Event::MoveRight:
+                break;
+            case Event::MoveForward:
+                break;
+            case Event::SpeedUp:
+                break;
+            case Event::SpeedDown:
+                break;
+            case Event::StateUpdated:
                 break;
         }
     }
 
     RacingHikerController::~RacingHikerController()
     {
-        cout << "RacingHikerController " << index << " is getting destructed." << endl;
+        cout << "RacingHikerController " << hikerIndex << " is getting destructed." << endl;
     }
 }

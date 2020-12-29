@@ -7,25 +7,30 @@
 
 #include <SFML/Graphics.hpp>
 #include <iostream>
-#include "../View/HikerView.h"
-#include "LaneViewSFML.h"
+#include "../../View/HikerView/HikerView.h"
+#include "../LaneViewSFML.h"
 
 namespace turboHikerSFML
 {
     class WorldViewSFML;
 
-    class HikerViewSFML: public turboHiker::HikerView, public sf::Drawable
+    class HikerViewSFML: public sf::Drawable, virtual public turboHiker::HikerView
     {
-    private:
+    protected:
+        float x;
+        float y;
+
         sf::Texture texture;
         sf::Sprite sprite;
         sf::RectangleShape hitBox;
 
         bool selected;
 
+        void setSprite();
+        void setHitBox(float scale);
+
     public:
-        HikerViewSFML(const std::weak_ptr<turboHiker::WorldView>& worldView, int hikerIndex);
-        void receiveEvent(const std::shared_ptr<turboHiker::ModelEvent>& event) override;
+        HikerViewSFML();
 
         void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
 

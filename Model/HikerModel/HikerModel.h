@@ -9,8 +9,8 @@
 #include <future>
 #include <thread>
 #include <iostream>
-#include "../Event/ModelEvent/HikerModelEvent.h"
-#include "../Event/ViewEvent/ViewEvent.h"
+#include "../../Event/ModelEvent/HikerModelEvent.h"
+#include "../../Event/ViewEvent/ViewEvent.h"
 
 namespace turboHiker
 {
@@ -19,7 +19,7 @@ namespace turboHiker
 
     class HikerModel: public std::enable_shared_from_this<HikerModel>
     {
-    private:
+    protected:
         int hikerIndex;
 
         double x;
@@ -32,8 +32,9 @@ namespace turboHiker
         HikerModel(const std::weak_ptr<WorldModel>& worldModel, int hikerIndex);
 
         void setCurrentLane(const std::weak_ptr<LaneModel>& givenCurrentLane);
+        void initializeCurrentLane(const std::weak_ptr<LaneModel>& givenCurrentLane);
 
-        void receiveEvent(const std::shared_ptr<Event>& event);
+        void handleEvent(const std::shared_ptr<Event>& event);
 
         std::string toString() const;
 
@@ -41,6 +42,9 @@ namespace turboHiker
         double getY() const;
 
         int getIndex() const;
+        int getLaneIndex() const;
+
+//        void processHikerEvent(const std::shared_ptr<HikerEvent>& event);
     };
 }
 

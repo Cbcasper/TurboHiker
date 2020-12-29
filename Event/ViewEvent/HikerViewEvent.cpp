@@ -8,8 +8,8 @@ using namespace std;
 
 namespace turboHiker
 {
-    HikerViewEvent::HikerViewEvent(int hikerIndex, HikerEventType hikerEventType, const std::string& message) :
-            ViewEvent(Event::HikerViewEvent, message), HikerEvent(hikerIndex, hikerEventType)
+    HikerViewEvent::HikerViewEvent(int hikerIndex, HikerEventType hikerEventType, Direction direction, const std::string& message) :
+            ViewEvent(Event::HikerViewEvent, message), HikerEvent(hikerIndex, hikerEventType, direction)
     {
 
     }

@@ -19,7 +19,7 @@ namespace turboHiker
         RacingHikerController(const std::weak_ptr<World>& world, int index);
         ~RacingHikerController() override;
 
-        void raiseEvent(const std::shared_ptr<Event>& event) override;
+        void handleEvent(const std::shared_ptr<Event>& event) override;
     };
 }
 

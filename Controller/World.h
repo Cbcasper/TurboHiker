@@ -5,13 +5,11 @@
 #ifndef TURBOHIKER_WORLD_H
 #define TURBOHIKER_WORLD_H
 
-#define TIMETOLIVE 10
+#define TIMETOLIVE 60
 
 #include <iostream>
 #include <vector>
 #include <memory>
-#include "../View/WorldView.h"
-#include "../Model/WorldModel.h"
 #include "HikerController/HikerController.h"
 #include "HikerController/RacingHikerController.h"
 #include "HikerController/PlayerHikerController.h"
@@ -19,9 +17,13 @@
 #include "Game.h"
 #include "../Event/ControllerEvent/HikerControllerEvent.h"
 #include "../Event/ModelEvent/HikerModelEvent.h"
+#include "../Utilities/Random.h"
 
 namespace turboHiker
 {
+    class WorldView;
+    class WorldModel;
+
     class World: public std::enable_shared_from_this<World>
     {
     private:
@@ -38,10 +40,12 @@ namespace turboHiker
         explicit World(const std::shared_ptr<WorldView>& worldView);
         virtual ~World();
 
-        void raiseViewEvent(const std::shared_ptr<ViewEvent>& event);
-        void raiseModelEvent(const std::shared_ptr<ModelEvent>& event);
-        void raiseGameEvent(const std::shared_ptr<GameEvent>& event);
-        void raiseControllerEvent(const std::shared_ptr<ControllerEvent>& event);
+//        void raiseViewEvent(const std::shared_ptr<ViewEvent>& event);
+//        void raiseModelEvent(const std::shared_ptr<ModelEvent>& event);
+//        void raiseGameEvent(const std::shared_ptr<GameEvent>& event);
+//        void raiseControllerEvent(const std::shared_ptr<ControllerEvent>& event);
+
+        void handleEvent(const std::shared_ptr<Event>& event);
 
         const std::shared_ptr<WorldModel>& getModel() const;
         const std::shared_ptr<WorldView>& getView() const;
@@ -49,6 +53,8 @@ namespace turboHiker
         void run();
 
         void constructHikerController(int i, HikerType type);
+
+        static std::vector<HikerType> getTypes(int numberOfHikers);
     };
 }
 

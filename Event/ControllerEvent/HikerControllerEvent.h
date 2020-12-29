@@ -12,12 +12,15 @@ namespace turboHiker
 {
     class HikerControllerEvent: public ControllerEvent, public HikerEvent
     {
+    protected:
+        int newLaneIndex;
+
     public:
-        HikerControllerEvent(int hikerIndex, HikerEventType hikerEventType, const std::string& message = "HikerControllerEvent");
+        HikerControllerEvent(int hikerIndex, HikerEventType hikerEventType, Direction direction = NoDirection, int newLaneIndex = 0, const std::string& message = "HikerControllerEvent");
 
         std::string what() override;
 
-        int getIndex() const;
+        int getNewLaneIndex() const;
     };
 }
 

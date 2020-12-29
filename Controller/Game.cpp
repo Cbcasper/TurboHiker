@@ -18,19 +18,23 @@ namespace turboHiker
 
     void Game::live()
     {
+        world.lock()->handleEvent(make_shared<Event>(Event::StartCountDown, "Start counting down."));
         for (int i = 3; i >= 1; i--)
         {
             this_thread::sleep_for(chrono::milliseconds(1000));
-            cout << i << endl;
+            if (!living) return;
+            world.lock()->handleEvent(make_shared<Event>(Event::CountDown, "Count down."));
+            cout << boolalpha << i << ": " << living << endl;
         }
-        world.lock()->raiseGameEvent(make_shared<GameEvent>(GameEvent::Start, "The game has started."));
+        if (!living) return;
+        world.lock()->handleEvent(make_shared<Event>(Event::StartGame, "The game has started."));
         while (hasLivedFor++ < timeToLive)
         {
-            if (!living)
-                return;
             this_thread::sleep_for(chrono::milliseconds(1000));
+            if (!living) return;
         }
-        world.lock()->raiseGameEvent(make_shared<GameEvent>(GameEvent::Stop, "The game has stopped."));
+        if (!living) return;
+        world.lock()->handleEvent(make_shared<Event>(Event::StopGame, "The game has stopped."));
     }
 
     Game::~Game()
