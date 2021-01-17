@@ -11,16 +11,7 @@ namespace turboHiker
 {
     HikerView::HikerView(const weak_ptr<WorldView>& worldView, int hikerIndex) :
             worldView(worldView), hikerIndex(hikerIndex)
-    {
-        cout << "HikerView " << hikerIndex << " is getting constructed!" << endl;
-    }
-
-    void HikerView::raiseEvent()
-    {
-        stringstream message;
-        message << "HikerView " << hikerIndex;
-//        worldView.lock()->raiseEvent(make_shared<HikerViewEvent>(hikerIndex, message.str()));
-    }
+    {}
 
     void HikerView::setCurrentLane(const weak_ptr<LaneView>& givenCurrentLane)
     {
@@ -30,5 +21,10 @@ namespace turboHiker
     int HikerView::getIndex() const
     {
         return hikerIndex;
+    }
+
+    int HikerView::getLaneIndex() const
+    {
+        return currentLane.lock()->getIndex();
     }
 }

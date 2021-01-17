@@ -9,6 +9,7 @@
 
 namespace turboHiker
 {
+    // Interface for the player hiker. Must be implemented to make the game presentation work
     class PlayerHikerView: virtual public HikerView
     {
     public:

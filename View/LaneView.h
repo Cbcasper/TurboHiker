@@ -11,32 +11,37 @@
 #include <sstream>
 #include <memory>
 #include <list>
+#include "../TurboHikerFactory/AbstractLane.h"
 
 namespace turboHiker
 {
     class WorldView;
     class HikerView;
+    class ObstacleView;
 
-    class LaneView
+    // Interface
+    class LaneView: public AbstractLane, public std::enable_shared_from_this<LaneView>
     {
     protected:
         std::weak_ptr<WorldView> worldView;
         std::list<std::shared_ptr<HikerView>> hikers;
+        std::list<std::shared_ptr<ObstacleView>> obstacles;
 
         int index;
+
     public:
-        LaneView(const std::weak_ptr<WorldView>& world, int laneIndex, const std::list<std::shared_ptr<turboHiker::HikerView>>& hikers);
+        LaneView(const std::weak_ptr<WorldView>& world, int laneIndex, const std::shared_ptr<turboHiker::HikerView>& hiker);
 
-        void raiseEvent();
+        // Implementation of abstract function of interface AbstractLane
+        void addObstacle(const std::shared_ptr<AbstractObstacle>& obstacle) override;
 
-        virtual ~LaneView();
+        // Utility functions that a lane view will have, regardless of the implementation
+        int getIndex() const;
 
-        template<class ...Hikers> void addHikers(const Hikers& ...newHikers)
-        {
-            std::list<std::shared_ptr<HikerView>> newHikerList = {newHikers...};
-            for (const std::shared_ptr<HikerView>& hiker: newHikerList)
-                hikers.emplace_back(hiker);
-        }
+        void removeHiker(const std::shared_ptr<HikerView>& hiker);
+        void addHiker(const std::shared_ptr<HikerView>& hiker);
+
+        void addObstacle(const std::shared_ptr<ObstacleView>& obstacle);
     };
 }
 

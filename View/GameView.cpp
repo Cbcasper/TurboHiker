@@ -8,11 +8,6 @@ using namespace std;
 
 namespace turboHiker
 {
-    GameView::GameView(): onCountDown(false), countDown(3)
+    GameView::GameView(const weak_ptr<WorldView>& worldView): onCountDown(false), countDown(3), worldView(worldView)
     {}
-
-    GameView::~GameView()
-    {
-        cout << "GameView is getting destructed." << endl;
-    }
 }

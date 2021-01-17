@@ -14,18 +14,17 @@ namespace turboHiker
     class PlayerHikerController: public HikerController
     {
     private:
-        bool moving;
-//        HikerEvent::Direction direction;
+        // A player hiker can be halted manually by the player
+        bool halted;
 
+        // Function executed in separated thread
         void live() override;
 
     public:
         PlayerHikerController(const std::weak_ptr<World>& world, int index);
-        ~PlayerHikerController() override;
+        ~PlayerHikerController() override = default;
 
         void handleEvent(const std::shared_ptr<Event>& event) override;
-
-        void changeLaneIndex(Event::EventType direction);
     };
 }
 

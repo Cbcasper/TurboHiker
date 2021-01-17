@@ -7,22 +7,32 @@
 
 #include <memory>
 #include <iostream>
-#include "../Event/GameEvent.h"
+#include "../Event/Event.h"
 
 namespace turboHiker
 {
+    class WorldView;
+
+    // Interface for the view of the game. Needs to be implemented for the game presentation to work
     class GameView
     {
     protected:
+        // Link to parent object
+        std::weak_ptr<WorldView> worldView;
+
+        // Whether the game is on count down and what the count down is
         bool onCountDown;
         int countDown;
 
     public:
-        GameView();
-        virtual ~GameView();
+        explicit GameView(const std::weak_ptr<WorldView>& worldView);
+        virtual ~GameView() = default;
 
-//        virtual void receiveGameEvent(const std::shared_ptr<GameEvent>& event) = 0;
+        // Abstract functions that will be called by the world
         virtual void handleEvent(const std::shared_ptr<Event>& event) = 0;
+        virtual void setFinishLinePosition(double x, double y) = 0;
+        // Move the portion of the world visible
+        virtual void scroll(double yOffset) = 0;
     };
 }
 

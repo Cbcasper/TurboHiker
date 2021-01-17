@@ -1,0 +1,48 @@
+cmake_minimum_required(VERSION 3.17)
+project(TurboHiker)
+
+set(CMAKE_CXX_STANDARD 11)
+
+SET(SRC Controller/World.cpp Controller/World.h
+        Utilities/Random.cpp Utilities/Random.h
+        Model/ScoringModel/ScoringModel.cpp Model/ScoringModel/ScoringModel.h
+        Model/WorldModel.cpp Model/WorldModel.h
+        Model/LaneModel.cpp Model/LaneModel.h
+        Model/HikerModel/HikerModel.cpp Model/HikerModel/HikerModel.h
+        View/LaneView.cpp View/LaneView.h
+        View/WorldView.cpp View/WorldView.h
+        View/HikerView/HikerView.cpp View/HikerView/HikerView.h
+        Event/Event.cpp Event/Event.h
+        Controller/HikerController/HikerController.cpp Controller/HikerController/HikerController.h
+        Controller/Game.cpp Controller/Game.h
+        Controller/HikerController/ComputerHikerController/RacingHikerController.cpp Controller/HikerController/ComputerHikerController/RacingHikerController.h
+        Controller/HikerController/PlayerHikerController.cpp Controller/HikerController/PlayerHikerController.h
+        Utilities/Transformation.cpp Utilities/Transformation.h
+        View/HikerView/PlayerHikerView.cpp View/HikerView/PlayerHikerView.h
+        View/HikerView/RacingHikerView.cpp View/HikerView/RacingHikerView.h
+        Model/HikerModel/PlayerHikerModel.cpp Model/HikerModel/PlayerHikerModel.h
+        Model/HikerModel/RacingHikerModel.cpp Model/HikerModel/RacingHikerModel.h
+        View/GameView.cpp View/GameView.h
+        Model/HikerModel/Hitbox.cpp Model/HikerModel/Hitbox.h
+        Model/ObstacleModel.cpp Model/ObstacleModel.h
+        View/ObstacleView.cpp View/ObstacleView.h
+        Model/HikerModel/StandingHikerModel.cpp Model/HikerModel/StandingHikerModel.h
+        View/HikerView/StandingHikerView.cpp View/HikerView/StandingHikerView.h
+        Model/HikerModel/AdversaryHikerModel.cpp Model/HikerModel/AdversaryHikerModel.h
+        View/HikerView/AdversaryHikerView.cpp View/HikerView/AdversaryHikerView.h
+        Controller/HikerController/ComputerHikerController/AdversaryHikerController.cpp Controller/HikerController/ComputerHikerController/AdversaryHikerController.h
+        Controller/HikerController/ComputerHikerController/ComputerHikerController.cpp Controller/HikerController/ComputerHikerController/ComputerHikerController.h
+        View/ScoringView.cpp View/ScoringView.h
+        Model/ScoringModel/HikerScore.cpp Model/ScoringModel/HikerScore.h
+        TurboHikerFactory/AbstractHiker.cpp TurboHikerFactory/AbstractHiker.h
+        TurboHikerFactory/AbstractObstacle.cpp TurboHikerFactory/AbstractObstacle.h
+        TurboHikerFactory/AbstractTurboHikerFactory.cpp TurboHikerFactory/AbstractTurboHikerFactory.h
+        TurboHikerFactory/ModelFactory.cpp TurboHikerFactory/ModelFactory.h
+        TurboHikerFactory/AbstractWorldComponent.cpp TurboHikerFactory/AbstractWorldComponent.h
+        TurboHikerFactory/ViewFactory.cpp TurboHikerFactory/ViewFactory.h
+        TurboHikerFactory/AbstractLane.cpp TurboHikerFactory/AbstractLane.h)
+
+add_library(TurboHiker SHARED ${SRC})
+
+install(TARGETS TurboHiker DESTINATION lib)
+install(FILES TurboHikerFactory/*.h View/*.h DESTINATION include)

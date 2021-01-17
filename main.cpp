@@ -1,19 +1,25 @@
-#include <iostream>
-#include <future>
-#include <thread>
-#include <vector>
-#include "Utilities/Random.h"
 #include "Controller/World.h"
-#include "ViewSFML/WorldViewSFML.h"
-#include "ViewSFML/HikerViewSFML/RacingHikerViewSFML.h"
+#include "ViewSFML/ViewSFMLFactory.h"
+#include "Model/ScoringModel/ScoringModel.h"
 
 using namespace std;
 
 int main()
 {
-    shared_ptr<turboHiker::WorldView> worldViewSFML = make_shared<turboHikerSFML::WorldViewSFML>(1600, 1600);
-    shared_ptr<turboHiker::World> world = make_shared<turboHiker::World>(worldViewSFML);
+    shared_ptr<turboHiker::ViewFactory> viewSFMLFactory = make_shared<turboHikerSFML::ViewSFMLFactory>();
+    shared_ptr<turboHiker::World> world = make_shared<turboHiker::World>(viewSFMLFactory);
     world->run();
+
+//    turboHiker::ScoringModel scoringModel;
+//    scoringModel.writeScore();
+//    scoringModel.writeScore();
+//    scoringModel.writeScore();
+//
+//    fstream highScoreFile("../HighScores/highScores.th");
+//    string fileContent;
+//    highScoreFile >> fileContent;
+//    highScoreFile.close();
+//    cout << fileContent;
 
     return 0;
 }

@@ -20,7 +20,7 @@ namespace turboHiker
                 static_cast<int>(round((y - currentY) * worldToScreenRatioY))};
     }
 
-    pair<int, int> Transformation::worldToScreen(const pair<double, double>& worldCoordinates)
+    pair<int, int> Transformation::worldToScreen(const pair<double, double>& worldCoordinates) const
     {
         return worldToScreen(worldCoordinates.first, worldCoordinates.second);
     }
@@ -30,9 +30,14 @@ namespace turboHiker
         return {x * screenToWorldRatioX, y * screenToWorldRatioY + currentY};
     }
 
-    pair<double, double> Transformation::screenToWorld(const pair<int, int>& screenCoordinates)
+    pair<double, double> Transformation::screenToWorld(const pair<int, int>& screenCoordinates) const
     {
         return screenToWorld(screenCoordinates.first, screenCoordinates.second);
+    }
+
+    std::pair<double, double> Transformation::screenToWorldDimensions(const pair<float, float>& screenCoordinates) const
+    {
+        return {screenCoordinates.first * screenToWorldRatioX, screenCoordinates.second * screenToWorldRatioY};
     }
 
     void Transformation::setRatios(int screenX, int screenY, double worldX, double worldY, bool resize)
@@ -46,5 +51,10 @@ namespace turboHiker
 
         if (!resize)
             currentY = worldY - visibleWorldY;
+    }
+
+    void Transformation::moveViewport(double offset)
+    {
+        currentY -= offset * screenToWorldRatioY;
     }
 }

@@ -6,6 +6,7 @@
 #define TURBOHIKER_RACINGHIKERMODEL_H
 
 #include "HikerModel.h"
+#include "../ScoringModel/ScoringModel.h"
 
 namespace turboHiker
 {

@@ -9,109 +9,46 @@ using namespace std;
 
 namespace turboHiker
 {
-    PlayerHikerController::PlayerHikerController(const std::weak_ptr<World>& world, int index): HikerController(world, index), moving(false)
+    // The player hiker is not halted at the start
+    PlayerHikerController::PlayerHikerController(const std::weak_ptr<World>& world, int index): HikerController(world, index), halted(false)
     {
 
     }
 
     void PlayerHikerController::live()
     {
-        stringstream message;
         while (living)
         {
-            message << "HikerController " << hikerIndex;
-            if (!world.expired())
+            // Raise event to move the hiker forward
+            if (moving)
                 world.lock()->handleEvent(make_shared<Event>(Event::MoveForward, hikerIndex));
+            // If the hiker is halted, it is not on time out so it doesn't need to handle the time out logic
+            else if (!halted)
+            {
+                // Be on time out
+                if (onTimeOutFor < timeOut)
+                    onTimeOutFor += interval;
+                else
+                {
+                    // Reset time out and start moving again
+                    onTimeOutFor = 0;
+                    moving = true;
+                    world.lock()->handleEvent(make_shared<Event>(Event::StartMoving, hikerIndex));
+                }
+            }
             this_thread::sleep_for(chrono::milliseconds(interval));
         }
     }
 
     void PlayerHikerController::handleEvent(const shared_ptr<Event>& event)
     {
+        HikerController::handleEvent(event);
         switch (event->eventType)
         {
-            case Event::StartCountDown:
-                break;
-            case Event::CountDown:
-                break;
-            case Event::StartGame:
-                break;
-            case Event::StopGame:
-                break;
-            case Event::ForceStopGame:
-                break;
-            case Event::MoveLeft:
-            case Event::MoveRight:
-                changeLaneIndex(event->eventType);
-                break;
-            case Event::MoveForward:
-                break;
-            case Event::SpeedUp:
-                if (interval > 1)
-                    interval--;
-                break;
-            case Event::SpeedDown:
-                if (interval <= 10)
-                    interval++;
-                break;
-            case Event::StateUpdated:
-                break;
-        }
-    }
-
-//    void PlayerHikerController::handleEvent(const shared_ptr<Event>& event)
-//    {
-//        switch (event->eventType)
-//        {
-//            case Event::HikerModelEvent:
-//                break;
-//            case Event::HikerViewEvent:
-//            {
-//                shared_ptr<HikerViewEvent> hikerViewEvent = dynamic_pointer_cast<HikerViewEvent>(event);
-//                cout << "PlayerHikerController received a hikerViewEvent.\n";
-//                switch (hikerViewEvent->hikerEventType)
-//                {
-//                    case HikerEvent::Move:
-//                        changeLaneIndex(hikerViewEvent->direction);
-//                        world.lock()->raiseControllerEvent(make_shared<HikerControllerEvent>(hikerIndex, HikerEvent::Move, hikerViewEvent->direction, laneIndex));
-//                        break;
-//                    case HikerEvent::SpeedUp:
-//                        if (interval > 1)
-//                            interval--;
-//                        break;
-//                    case HikerEvent::SpeedDown:
-//                        if (interval <= 10)
-//                            interval++;
-//                        break;
-//                    default:
-//                        break;
-//                }
-//            }
-//                break;
-//            default:
-//                break;
-//        }
-//    }
-
-    PlayerHikerController::~PlayerHikerController()
-    {
-        cout << "PlayerHikerController " << hikerIndex << " is getting destructed." << endl;
-    }
-
-    void PlayerHikerController::changeLaneIndex(Event::EventType eventType)
-    {
-        switch (eventType)
-        {
-            case Event::MoveLeft:
-                if (laneIndex > 0)
-                    laneIndex--;
-                break;
-            case Event::MoveRight:
-                if (laneIndex < 3)
-                    laneIndex++;
-                break;
-            default:
-                break;
+            // Set halted accordingly
+            case Event::HaltHiker: halted = true;    break;
+            case Event::LetGoHiker: halted = false;  break;
+            default:                                 break;
         }
     }
 }

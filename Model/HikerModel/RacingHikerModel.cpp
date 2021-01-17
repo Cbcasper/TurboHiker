@@ -4,6 +4,8 @@
 
 #include "RacingHikerModel.h"
 
+using namespace std;
+
 namespace turboHiker
 {
     RacingHikerModel::RacingHikerModel(const std::weak_ptr<WorldModel>& worldModel, int hikerIndex) :

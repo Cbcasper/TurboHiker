@@ -8,17 +8,45 @@ using namespace std;
 
 namespace turboHikerSFML
 {
-    LaneViewSFML::LaneViewSFML(const weak_ptr<turboHiker::WorldView>& world, int index, const std::list<std::shared_ptr<turboHiker::HikerView>>& hikers) : LaneView(world, index, hikers)
+    LaneViewSFML::LaneViewSFML(const weak_ptr<turboHiker::WorldView>& world, int index, const std::shared_ptr<turboHiker::HikerView>& hiker): LaneView(world, index, hiker), topY(0), bottomY(-1600)
     {
-        texture.loadFromFile("grassTexture.jpg");
-        rectangleShape = sf::RectangleShape(sf::Vector2f(400, 1600));
-        rectangleShape.setTexture(&texture);
-        rectangleShape.setTextureRect(sf::IntRect(float(index) * 600 + 900, 200, 600, 2400));
-        rectangleShape.setPosition(float(index) * 400, 0);
+        // Load the texture
+        texture.loadFromFile("cobblePathLanes.png");
+
+        // Set parameters or both rectangles to be identical, except for the y-value
+        topRectangle = sf::RectangleShape(sf::Vector2f(400, 1600));
+        topRectangle.setTexture(&texture);
+        topRectangle.setTextureRect(sf::IntRect(float(index) * 512, 0, 512, 2048));
+        topRectangle.setPosition(float(index) * 400, float(topY));
+
+        bottomRectangle = sf::RectangleShape(sf::Vector2f(400, 1600));
+        bottomRectangle.setTexture(&texture);
+        bottomRectangle.setTextureRect(sf::IntRect(float(index) * 512, 0, 512, 2048));
+        bottomRectangle.setPosition(float(index) * 400, float(bottomY));
     }
 
     void LaneViewSFML::draw(sf::RenderTarget& target, sf::RenderStates states) const
     {
-        target.draw(rectangleShape);
+        target.draw(topRectangle);
+        target.draw(bottomRectangle);
+    }
+
+    void LaneViewSFML::scroll(double offset)
+    {
+        // Compute the new values and wrap them
+        topY = wrap(topY + offset, 0, 1600);
+        bottomY = wrap(bottomY + offset, -1600, 0);
+        // Set the position of the rectangles to the new values
+        topRectangle.setPosition(float(index) * 400, float(topY));
+        bottomRectangle.setPosition(float(index) * 400, float(bottomY));
+    }
+
+    double LaneViewSFML::wrap(double value, int bottomBorder, int topBorder)
+    {
+        // Check if the value is outside of the given interval
+        if (value > topBorder)
+            // Set it inside the interval
+            return bottomBorder + (value - topBorder);
+        return value;
     }
 }
